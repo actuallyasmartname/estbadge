@@ -1,7 +1,6 @@
-import requests as r
-import datetime, time
-plr = input("Input the UserID of the player: ")
-plr = int(plr)
+import httpx as r
+import datetime
+plr = int(input("Input the UserID of the player: "))
 date = input("Input the date you want to travel back to (YYYY-MM-DD, ex. 2022-12-24): ")
 year, month, day = map(int, date.split('-'))
 date1 = datetime.date(year, month, day)
@@ -13,11 +12,9 @@ while True:
     badgecnt = r.get(f"https://badges.roblox.com/v1/users/{plr}/badges?limit=100&cursor={c}&sortOrder=Asc")
     for i in range(0, len(badgecnt.json()['data'])):
         hunnidlist.append(badgecnt.json()['data'][i]['id'])
-        time.sleep(.001)
     awarddates = r.get(f"https://badges.roblox.com/v1/users/{plr}/badges/awarded-dates?badgeIds={str(hunnidlist).replace('[', '').replace(']', '')}")
     for i in range(0, len(awarddates.json()['data'])):
-        dateo = datetime.datetime.fromisoformat(awarddates.json()['data'][i]['awardedDate'])
-        dateo = datetime.datetime.date(dateo)
+        dateo = datetime.datetime.date(datetime.datetime.fromisoformat(awarddates.json()['data'][i]['awardedDate']))
         if dateo > date1:
             done = True
             continue
@@ -25,9 +22,9 @@ while True:
             count += 1
     if done == True or badgecnt.json()['nextPageCursor'] == None:
         print(badgecnt.json()['previousPageCursor'])
-        print(count)
+        print(f"Final Count: {count}")
         break
-    print(count)
+    print(f"Counted: {count}")
     c = badgecnt.json()['nextPageCursor']
     hunnidlist.clear()
     continue
