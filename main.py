@@ -1,10 +1,11 @@
-import aiohttp, asyncio, datetime
+import aiohttp, asyncio
+from datetime import date, datetime
 async def main():
     plr = int(input("Input the UserID of the player: "))
-    date = input("Input the date you want to travel back to (YYYY-MM-DD, ex. 2022-12-24): ")
-    year, month, day = map(int, date.split('-'))
-    date1 = datetime.date(year, month, day)
-    hunnidlist = []
+    datein = input("Input the date you want to travel back to (YYYY-MM-DD, ex. 2022-12-24): ")
+    year, month, day = map(int, datein.split('-'))
+    date1 = date(year, month, day)
+    hundredlist = []
     count = 0
     done = False
     c = ""
@@ -12,11 +13,11 @@ async def main():
         async with aiohttp.ClientSession() as session:
             async with session.get(f"https://badges.roblox.com/v1/users/{plr}/badges?limit=100&cursor={c}&sortOrder=Asc") as badgecnt:
                 for i in range(0, len((await badgecnt.json())['data'])):
-                    hunnidlist.append((await badgecnt.json())['data'][i]['id'])
-            async with session.get(f"https://badges.roblox.com/v1/users/{plr}/badges/awarded-dates?badgeIds={str(hunnidlist).replace('[', '').replace(']', '')}") as awarddates:
+                    hundredlist.append((await badgecnt.json())['data'][i]['id'])
+            async with session.get(f"https://badges.roblox.com/v1/users/{plr}/badges/awarded-dates?badgeIds={str(hundredlist).replace('[', '').replace(']', '')}") as awarddates:
                 for i in range(0, len((await awarddates.json())['data'])):
-                    dateo = datetime.datetime.date(datetime.datetime.fromisoformat((await awarddates.json())['data'][i]['awardedDate']))
-                    if dateo > date1:
+                    date2 = datetime.date(datetime.fromisoformat((await awarddates.json())['data'][i]['awardedDate']))
+                    if date2 > date1:
                         done = True
                         continue
                     else:
@@ -27,6 +28,5 @@ async def main():
                 break
         print(f"Counted: {count}")
         c = (await badgecnt.json())['nextPageCursor']
-        hunnidlist.clear()
-        continue
+        hundredlist.clear()
 asyncio.run(main())
