@@ -9,7 +9,7 @@ count = 0
 done = False
 c = ""
 while True:
-    badgecnt = r.get(f"https://badges.roblox.com/v1/users/{plr}/badges?limit=100&cursor={c}&sortOrder=Asc")
+    badgecnt = r.get(f"https://badges.roblox.com/v1/users/{plr}/badges?limit=100&cursor={c}&sortOrder=Asc", timeout=10)
     for i in range(0, len(badgecnt.json()['data'])):
         hunnidlist.append(badgecnt.json()['data'][i]['id'])
     awarddates = r.get(f"https://badges.roblox.com/v1/users/{plr}/badges/awarded-dates?badgeIds={str(hunnidlist).replace('[', '').replace(']', '')}")
