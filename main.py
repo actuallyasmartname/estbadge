@@ -14,7 +14,7 @@ async def main():
             async with session.get(f"https://badges.roblox.com/v1/users/{plr}/badges?limit=100&cursor={c}&sortOrder=Asc") as badgecnt:
                 for i in range(0, len((await badgecnt.json())['data'])):
                     hundredlist.append((await badgecnt.json())['data'][i]['id'])
-            async with session.get(f"https://badges.roblox.com/v1/users/{plr}/badges/awarded-dates?badgeIds={str(hundredlist).replace('[', '').replace(']', '')}") as awarddates:
+            async with session.get(f"https://badges.roblox.com/v1/users/{plr}/badges/awarded-dates?badgeIds={str(hundredlist)[1:-1]}") as awarddates:
                 print(await awarddates.json())
                 for i in range(0, len((await awarddates.json())['data'])):
                     date2 = datetime.date(datetime.fromisoformat((await awarddates.json())['data'][i]['awardedDate']))
