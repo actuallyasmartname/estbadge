@@ -15,6 +15,7 @@ async def main():
                 for i in range(0, len((await badgecnt.json())['data'])):
                     hundredlist.append((await badgecnt.json())['data'][i]['id'])
             async with session.get(f"https://badges.roblox.com/v1/users/{plr}/badges/awarded-dates?badgeIds={str(hundredlist).replace('[', '').replace(']', '')}") as awarddates:
+                print(await awarddates.json())
                 for i in range(0, len((await awarddates.json())['data'])):
                     date2 = datetime.date(datetime.fromisoformat((await awarddates.json())['data'][i]['awardedDate']))
                     if date2 > date1:
@@ -25,6 +26,7 @@ async def main():
             if done == True or (await badgecnt.json())['nextPageCursor'] == None:
                 print((await badgecnt.json())['previousPageCursor'])
                 print(f"Final Count: {count}")
+                await session.close()
                 break
         print(f"Counted: {count}")
         c = (await badgecnt.json())['nextPageCursor']
