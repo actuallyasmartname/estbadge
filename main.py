@@ -26,7 +26,6 @@ async def main():
             if done == True or (await badgecnt.json())['nextPageCursor'] == None:
                 print((await badgecnt.json())['previousPageCursor'])
                 print(f"Final Count: {count}")
-                await session.close()
                 break
         print(f"Counted: {count}")
         c = (await badgecnt.json())['nextPageCursor']
